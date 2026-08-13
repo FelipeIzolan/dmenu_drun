@@ -3,7 +3,7 @@
 Terminal='st'
 Choice=$(basename -a /usr/share/applications/*.desktop | dmenu "$@")
 
-DesktopValues=$(grep -E 'Exec|Terminal' "/usr/share/applications/$Choice")
+DesktopValues=$(grep -E '^Exec=|^Terminal=' "/usr/share/applications/$Choice")
 DesktopExec=$(echo "$DesktopValues" | awk -F'=' 'NR==1{print$2}')
 DesktopTerminal=$(echo "$DesktopValues" | awk -F'=' 'NR==2{print$2}')
 
