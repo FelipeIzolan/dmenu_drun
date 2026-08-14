@@ -1,11 +1,14 @@
 #!/bin/sh
 
 Terminal='st'
-Choice=$(basename -a /usr/share/applications/*.desktop | dmenu "$@")
+Choice=$(
+  basename -a /usr/share/applications/*.desktop |
+  dmenu "$@"
+) || exit 0
 
-DesktopValues=$(grep -E '^Exec=|^Terminal=' "/usr/share/applications/$Choice")
-DesktopExec=$(echo "$DesktopValues" | awk -F'=' 'NR==1{print$2}')
-DesktopTerminal=$(echo "$DesktopValues" | awk -F'=' 'NR==2{print$2}')
+DesktopFile="/usr/share/applications/$Choice"
+DesktopExec=$(sed -n 's/^Exec=//p' "$DesktopFile" | head -n1)
+DesktopTerminal=$(sed -n 's/^Terminal=//p' "$DesktopFile")
 
 if [ "$DesktopTerminal" = "true" ]; then
   ${SHELL:-"/bin/sh"} -c "$Terminal -e $DesktopExec" &
