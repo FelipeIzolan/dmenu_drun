@@ -7,7 +7,7 @@ Choice=$(
 ) || exit 0
 
 DesktopFile="/usr/share/applications/$Choice"
-DesktopExec=$(sed -n 's/^Exec=//p' "$DesktopFile" | head -n1 | sed -n 's/%[a-zA-z]//p')
+DesktopExec=$(sed -n 's/^Exec=//p' "$DesktopFile" | sed -E 's/%[[:alpha:]]//p' | head -n1)
 DesktopTerminal=$(sed -n 's/^Terminal=//p' "$DesktopFile")
 
 if [ "$DesktopTerminal" = "true" ]; then
